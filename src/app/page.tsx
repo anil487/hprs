@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@radix-ui/react-select";
 
 type PlanNode = {
   name: string;
@@ -193,6 +194,16 @@ const Home = () => {
     }
   };
 
+  const getProjectType = (plan: string) => {
+    if (plan.includes("Woocommerce Hosting")) return "Woocommerce Store";
+    if (plan.includes("Ecommerce Hosting")) return "Ecommerce Platform";
+    if (plan.includes("Node Hosting")) return "Node.js App";
+    if (plan.includes("Business Email Hosting")) return "Business Website";
+    if (plan.includes("Python Hosting")) return "Django App";
+    if (plan.includes("Blog Hosting")) return "Blogging";
+    return null;
+  };
+
   return (
     <section className="flex items-center justify-center min-h-screen w-full bg-white p-4 md:p-0 md:relative">
       <div className="hidden md:block absolute -left-10 top-1/2 transform -translate-y-1/2">
@@ -232,28 +243,45 @@ const Home = () => {
           >
             <div>
               <div className="mb-2 md:mb-5">
+                <label
+                  htmlFor="hosting-plan"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Choose Your Project Type
+                </label>
                 <Select
                   onValueChange={(value) => setSelectedPlan(value)}
                   value={selectedPlan}
                   required
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a plan" />
+                    <SelectValue placeholder="Select a Project" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="overflow-y-auto h-32">
                     <SelectGroup>
-                      <SelectLabel>Select Your Plan</SelectLabel>
-                      {uniquePlans.map((plan, index) => (
-                        <SelectItem key={index} value={plan}>
-                          {plan}
-                        </SelectItem>
-                      ))}
+                      <SelectLabel>Select Your project</SelectLabel>
+                      {uniquePlans
+                        .filter((plan) => plan !== null)
+                        .map((plan, index) => {
+                          const projectType = getProjectType(plan);
+                          return projectType ? (
+                            <SelectItem key={index} value={plan}>
+                              {projectType}
+                            </SelectItem>
+                          ) : null;
+                        })}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="mb-2 md:mb-5">
+                <label
+                  htmlFor="hosting-plan"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Choose Your Traffic Range
+                </label>
                 <Select
                   onValueChange={(value) => setSelectedTraffic(value)}
                   value={selectedTraffic}
@@ -263,7 +291,7 @@ const Home = () => {
                   <SelectTrigger>
                     <SelectValue placeholder="Select traffic Range" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="overflow-y-auto h-32">
                     <SelectGroup>
                       <SelectLabel>Select Your Traffic Range</SelectLabel>
                       {trafficflow.map((traffic, index) => (
@@ -277,6 +305,12 @@ const Home = () => {
               </div>
 
               <div className="mb-2 md:mb-5">
+                <label
+                  htmlFor="hosting-plan"
+                  className=" block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Choose your budget Range
+                </label>
                 <Select
                   onValueChange={(value) => setSelectedBudget(value)}
                   value={selectedBudget}
@@ -286,7 +320,7 @@ const Home = () => {
                   <SelectTrigger>
                     <SelectValue placeholder="Select Budget Range" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="overflow-y-auto h-32">
                     <SelectGroup>
                       <SelectLabel>
                         Select Your Monthly Budget Range
