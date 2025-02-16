@@ -1,133 +1,137 @@
-"use client"
+import { CheckCircledIcon } from "@radix-ui/react-icons";
+import React from "react";
+import SPFMaker from "./form";
 
-import { useSPFMaker } from "./spfmaker"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { CopyIcon, ResetIcon } from "@radix-ui/react-icons"
+const needSPF = [
+  {
+    title: " Prevent Email Spoofing",
+  },
+  {
+    title: " Improve Email Deliverability",
+  },
+  {
+    title: " Protect Your Domain’s Reputation",
+  },
+  {
+    title: " Authenticate Your Email Traffic",
+  },
+  {
+    title: "Compliance with Anti-Spam Policies ",
+  },
+];
 
-export type SPFConfig = {
-  domain: string
-  allowMX: string
-  allowIP: string
-  allowHostname: string
-  ipAddresses: string
-  serverHostnames: string
-  relayDomains: string
-  strictness: string
-}
-
-export default function SPFMaker() {
-  const { config, spfRecord, copied, handleChange, copyToClipboard, resetForm } = useSPFMaker()
-
+export const page = () => {
   return (
-    <div className="container mx-auto p-4 max-w-3xl">
-      <div className="flex items-center justify-center text-5xl font-bold mb-20">SPF MAKER</div>
-      <Card>
-        <CardHeader>
-          
-          <CardDescription>
-            Ensure flawless email delivery and safeguard against spam with our SPF Record Generator. This essential tool
-            creates a customized SPF record for your domain, which you can easily add to your DNS settings as a TXT
-            record. Prevent unauthorized use of your domain and maintain your email&apos;s integrity.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="mb-6">
-            <Label>Generated SPF record:</Label>
-            <div className="flex items-center gap-2">
-              <Input value={spfRecord} readOnly className="bg-muted font-mono text-sm flex-1" />
-              <Button onClick={copyToClipboard} className="bg-blue-500 text-white hover:bg-blue-800">
-                <CopyIcon />
-              </Button>
-              <Button onClick={resetForm} className="bg-gray-50 text-black hover:bg-gray-100">
-                <ResetIcon />
-              </Button>
-            </div>
-            <div>
-              {copied && <p className="text-green-600 mb-2">SPF record copied!</p>}
-              <p className="text-sm text-muted-foreground mt-1">(copy and paste in your DNS as a TXT record)</p>
-            </div>
-          </div>
-
-          <div className="grid gap-4">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-              <Label className="w-full sm:w-72">Your domain name:</Label>
-              <Input
-                placeholder="i.e stablecluster.com"
-                value={config.domain}
-                onChange={(e) => handleChange("domain", e.target.value)}
-                className="w-full"
-              />
-            </div>
-
-            {[
-              { label: "Allow servers listed as MX", field: "allowMX" },
-              { label: "Allow current IP address of domain", field: "allowIP" },
-              { label: "Allow any hostname ending in", field: "allowHostname" },
-            ].map(({ label, field }) => (
-              <div key={field} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                <Label className="w-full sm:w-72">{label}:</Label>
-                <Select
-                  value={config[field as keyof SPFConfig]}
-                  onValueChange={(value) => handleChange(field as keyof SPFConfig, value)}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="-" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="-">-</SelectItem>
-                    <SelectItem value="yes">Yes</SelectItem>
-                    <SelectItem value="no">No</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+    <div className="container mx-auto p-4 max-w-4xl">
+      <SPFMaker />
+      <div className="my-16">
+        <section>
+          <h2 className="font-bold text-2xl md:text-3xl mb-2 ">
+            What is an SPF Record?
+          </h2>
+          <p className="text-base text-gray-700 ">
+            An SPF (Sender Policy Framework) record is a DNS (Domain Name
+            System) record that helps prevent email spoofing by specifying which
+            mail servers are allowed to send emails on behalf of your domain. It
+            is a type of email authentication method that allows the receiving
+            mail server to verify if an email claiming to come from your domain
+            is being sent by an authorized server.
+          </p>
+        </section>
+        <section className="space-y-">
+          <h2 className="font-bold text-2xl md:text-3xl mb-2">
+            What information is found in an SPF Record?
+          </h2>
+          <p className="text-base text-gray-700 ">
+            Here’s a summary of the key information found in an SPF record, in
+            points:
+          </p>
+          <li className="flex items-center space-x-2">
+            <CheckCircledIcon className="text-violet-500 w-5 h-5 flex-shrink-0 " />
+            <span>
+              <strong>Version (v):</strong>Specifies the SPF version being used
+              (e.g., spf1).
+            </span>
+          </li>
+          <li className="flex items-center space-x-2">
+            <CheckCircledIcon className="text-violet-500 w-5 h-5 flex-shrink-0 " />
+            <span>
+              <strong>Mechanisms: </strong> Define authorized senders:
+            </span>
+          </li>
+          <ul className="list-disc list-inside">
+            <li>
+              {" "}
+              <strong>ip4 / ip6: </strong>Specifies allowed IP addresses.
+            </li>
+            <li>
+              {" "}
+              <strong>a: </strong>Allows domain&apos A record IP.
+            </li>
+            <li>
+              <strong>mx:</strong> Allows domain&apos mail exchange servers.
+            </li>
+            <li>
+              <strong>include: </strong>Includes SPF record of another domain.
+            </li>
+            <li>
+              {" "}
+              <strong>include:</strong> Includes SPF record of another domain.
+            </li>
+            <li>
+              {" "}
+              <strong>all: </strong>A catch-all for all senders (usually at the
+              end).
+            </li>
+          </ul>
+          <li className="flex items-center space-x-2">
+            <CheckCircledIcon className="text-violet-500 w-5 h-5 flex-shrink-0" />
+            <span>
+              <strong> Qualifiers:</strong> Define the result of a match:
+            </span>
+          </li>
+          <ul className="list-disc list-inside">
+            <li>+: Pass (default).</li>
+            <li>-: Fail (hard fail).</li>
+            <li>~: SoftFail (soft fail).</li>
+          </ul>
+        </section>
+        <section className="space-y-3">
+          <h2 className="font-bold text-2xl md:text-3xl">
+            Why do I need an SPF record for my domain?
+          </h2>
+          <ul>
+            {needSPF.map((item, index) => (
+              <li key={index} className="flex items-center space-x-2">
+                <CheckCircledIcon className="text-violet-500 w-5 h-5 flex-shrink-0" />
+                <span>{item.title}</span>
+              </li>
             ))}
-
-            {[
-              {
-                label: "IP addresses in CIDR format",
-                field: "ipAddresses",
-                placeholder: "i.e: 10.0.0.1/32 192.168.0.1/28",
-              },
-              { label: "Other server hostnames", field: "serverHostnames", placeholder: "i.e: ns1.stablecluster.com" },
-              {
-                label: "Domains that may relay mail",
-                field: "relayDomains",
-                placeholder: "i.e: newsletter-domain.com mailer-domain.com",
-              },
-            ].map(({ label, field, placeholder }) => (
-              <div key={field} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                <Label className="w-full sm:w-72">{label}:</Label>
-                <Input
-                  placeholder={placeholder}
-                  value={config[field as keyof SPFConfig]}
-                  onChange={(e) => handleChange(field as keyof SPFConfig, e.target.value)}
-                  className="w-full"
-                />
-              </div>
-            ))}
-
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-              <Label className="w-full sm:w-72">Strictness of SPF enforcement:</Label>
-              <Select value={config.strictness} onValueChange={(value) => handleChange("strictness", value)}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="-" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="-">-</SelectItem>
-                  <SelectItem value="Strict">Strict (Fail)</SelectItem>
-                  <SelectItem value="Soft">Soft Fail</SelectItem>
-                  <SelectItem value="Neutral">Neutral</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </ul>
+        </section>
+        <section className="mt-3">
+          <h2 className="font-bold text-2xl md:text-3xl mb-2">
+            What should i do after generating an SPF Record?
+          </h2>
+          <span>
+            <li>
+              <strong>Add SPF to DNS: </strong>Log in to your domain provider,
+              create a TXT record, and paste the generated SPF value.
+            </li>
+            <li>
+              <strong>Verify & Test: </strong>Use MXToolbox or nslookup
+              -type=TXT yourdomain.com to check propagation, then send a test
+              email.
+            </li>
+            <li>
+              <strong>Verify & Test: </strong>Use MXToolbox or nslookup
+              -type=TXT yourdomain.com to check propagation, then send a test
+              email.
+            </li>
+          </span>
+        </section>
+      </div>
     </div>
-  )
-}
-
+  );
+};
+export default page;
