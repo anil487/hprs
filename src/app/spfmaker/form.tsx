@@ -18,9 +18,8 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy,  } from "lucide-react";
-
-
+import { Copy } from "lucide-react";
+import { ResetIcon } from "@radix-ui/react-icons";
 
 type SPFConfig = {
   domain: string;
@@ -86,7 +85,12 @@ export function SPFMaker() {
       });
     }
 
-    record += config.strictness === "Strict" ? " -all" : " ~all";
+    record +=
+      config.strictness === "Strict"
+        ? " -all"
+        : config.strictness === "Neutral"
+        ? " ?all"
+        : " ~all";
     setSpfRecord(record);
   }, [config]);
 
@@ -107,8 +111,6 @@ export function SPFMaker() {
     setConfig(initialConfig);
     setSpfRecord("");
   };
-
-  
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
@@ -147,7 +149,7 @@ export function SPFMaker() {
                   variant="outline"
                   className="flex-grow sm:flex-grow-0"
                 >
-                  
+                  <ResetIcon />
                 </Button>
               </div>
             </div>
@@ -261,14 +263,14 @@ export function SPFMaker() {
                   <SelectItem value="-">-</SelectItem>
                   <SelectItem value="Strict">Strict (Fail)</SelectItem>
                   <SelectItem value="Soft">Soft Fail</SelectItem>
+                  <SelectItem value="Neutral">Neutral</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
         </CardContent>
       </Card>
-
     </div>
   );
-} 
+}
 export default SPFMaker;

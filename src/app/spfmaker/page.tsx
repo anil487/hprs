@@ -91,9 +91,10 @@ export const page = () => {
             </span>
           </li>
           <ul className="list-disc list-inside">
-            <li>+: Pass (default).</li>
-            <li>-: Fail (hard fail).</li>
-            <li>~: SoftFail (soft fail).</li>
+            <li>~all: default (soft fail).</li>
+            <li>-all: Fail (hard fail).</li>
+            <li>~all: SoftFail (soft fail).</li>
+            <li>?all: Neutral</li>
           </ul>
         </section>
         <section className="space-y-3">
